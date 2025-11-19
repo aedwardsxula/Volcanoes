@@ -1,3 +1,4 @@
+from datetime import datetime
 class Events:
     def __init__(self, title, description, start_time, end_time, location):
         self.title = title
@@ -7,3 +8,8 @@ class Events:
         self.location = location
         self.created_at = None
         self.updated_at = None
+
+def create_event(title, description, start_time, end_time, location):
+    event = Events(title, description, start_time, end_time, location)
+    event.created_at = datetime.now()
+    return event
