@@ -38,4 +38,4 @@ event3 = Events.create_event("How to win social media", "A lesson on creating an
 #print(event3.is_event_virtual())
 event4 = Events.create_event("Webinar on Data Science", "An in-depth webinar on data science techniques.", "2023-12-01 09:00am", "2023-12-01 11:00am", "http://datasciencewebinar.com")
 #print(event4.is_event_virtual())
-print(event1)
+#print(event1)
