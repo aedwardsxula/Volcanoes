@@ -8,6 +8,9 @@ class Events:
         self.location = location
         self.created_at = None
         self.updated_at = None
+
+    def __repr__(self):
+        return f"title: {self.title}, \ndescription: {self.description}, \nstart_time: {self.start_time}, \nend_time: {self.end_time}, location: {self.location}"
     
     @staticmethod
     def create_event(title, description, start_time, end_time, location):
@@ -27,12 +30,12 @@ class Events:
             return True
         return False
 
-event1 = Events.create_event("Online Workshop", "Join us for a virtual workshop on Python.", "2023-10-01 10:00", "2023-10-01 12:00", "Zoom")
-print(event1.is_event_virtual())  
-even2 = Events.create_event("Local Meetup", "Meetup at the community center.", "2023-10-05 18:00", "2023-10-05 20:00", "123 Main St")
-print(even2.is_event_virtual())
-event3 = Events.create_event("How to win social media", "A lesson on creating an online persona.", "2023-11-15 14:00", "2023-11-15 16:00", "456 Elm St")
-print(event3.is_event_virtual())
-event4 = Events.create_event("Webinar on Data Science", "An in-depth webinar on data science techniques.", "2023-12-01 09:00", "2023-12-01 11:00", "http://datasciencewebinar.com")
-print(event4.is_event_virtual())
-
+event1 = Events.create_event("Online Workshop", "Join us for a virtual workshop on Python.", "2023-10-01 10:00am", "2023-10-01 12:00pm", "Zoom")
+#print(event1.is_event_virtual())  
+event2 = Events.create_event("Local Meetup", "Meetup at the community center.", "2023-10-05 06:00pm", "2023-10-05 08:00pm", "123 Main St")
+#print(event2.is_event_virtual())
+event3 = Events.create_event("How to win social media", "A lesson on creating an online persona.", "2023-11-15 02:00pm", "2023-11-15 04:00pm", "456 Elm St")
+#print(event3.is_event_virtual())
+event4 = Events.create_event("Webinar on Data Science", "An in-depth webinar on data science techniques.", "2023-12-01 09:00am", "2023-12-01 11:00am", "http://datasciencewebinar.com")
+#print(event4.is_event_virtual())
+print(event1)

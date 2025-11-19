@@ -6,4 +6,9 @@ class FilterEvent:
         self.events = events
 
     def view_virtual_events(self):
-        pass
+        virtual_events = []
+        for event in self.events:
+            if event.is_event_virtual():
+                virtual_events.append(event)
+        return f"Upcoming Virtual Events: {virtual_events}"
+    
