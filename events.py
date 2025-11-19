@@ -9,7 +9,7 @@ class Events:
         self.created_at = None
         self.updated_at = None
 
-def create_event(title, description, start_time, end_time, location):
-    event = Events(title, description, start_time, end_time, location)
-    event.created_at = datetime.now()
-    return event
+    def create_event(title, description, start_time, end_time, location):
+        event = Events(title, description, start_time, end_time, location)
+        event.created_at = datetime.now()
+        return event
