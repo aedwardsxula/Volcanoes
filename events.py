@@ -76,8 +76,33 @@ class Events:
         self.validate_event_name(new_name)
         self.title = new_name.strip()
         return f"Event name successfully updated to '{self.title}'."
+    
+    
+    
+    def validate_event_time(self, new_start_time, new_end_time):
+        TIME_PATTERN = r"^(1[0-2]|0?[1-9]):[0-5][0-9]\s?(am|pm|AM|PM)$"
 
+        if not isinstance(new_start_time, str) or not isinstance(new_end_time, str):
+            raise ValueError("Start time and end time must be strings.")
 
+        if not new_start_time.strip() or not new_end_time.strip():
+            raise ValueError("Start time and end time cannot be empty.")
+
+        if not re.match(TIME_PATTERN, new_start_time.strip()):
+            raise ValueError("Invalid start time format. Use '2:00pm' (12-hour format).")
+
+        if not re.match(TIME_PATTERN, new_end_time.strip()):
+            raise ValueError("Invalid end time format. Use '2:00pm' (12-hour format).")
+
+        start_dt = datetime.strptime(new_start_time.strip().lower(), "%I:%M%p")
+        end_dt = datetime.strptime(new_end_time.strip().lower(), "%I:%M%p")
+
+        if end_dt <= start_dt:
+            raise ValueError("End time must be later than start time.")
+
+        return True
+    
+    
 event1 = Events.create_event("Online Workshop", "Join us for a virtual workshop on Python.", "2023-10-01 10:00am", "2023-10-01 12:00pm", "Zoom")
 #print(event1.is_event_virtual())  
 event2 = Events.create_event("Local Meetup", "Meetup at the community center.", "2023-10-05 06:00pm", "2023-10-05 08:00pm", "123 Main St")
