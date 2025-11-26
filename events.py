@@ -13,6 +13,7 @@ class Events:
         self.location = location
         self.created_at = None
         self.updated_at = None
+        self.status = "active"
 
     def __repr__(self):
         return f"title: {self.title}, \ndescription: {self.description}, \nstart_time: {self.start_time}, \nend_time: {self.end_time}, location: {self.location}"
