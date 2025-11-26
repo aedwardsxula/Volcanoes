@@ -40,3 +40,22 @@ class TestRSVPService(unittest.TestCase):
     def test_cancel_rsvp_not_found(self):
         msg = self.rsvp_service.cancel_rsvp(self.event1, self.user1)
         self.assertEqual(msg, "No active RSVP found to cancel.")
+
+     # Test get_user_rsvps()
+    def test_get_user_rsvps_with_results(self):
+        self.rsvp_service.create_rsvp(self.event1, self.user1)
+        self.rsvp_service.create_rsvp(self.event2, self.user1)
+
+        result = self.rsvp_service.get_user_rsvps(self.user1)
+
+        self.assertEqual(len(result), 2)
+        self.assertIn("Hackathon: going", result)
+        self.assertIn("Workshop: going", result)
+
+    def test_get_user_rsvps_none(self):
+        result = self.rsvp_service.get_user_rsvps(self.user1)
+        self.assertEqual(result, "You have no active RSVPs.")
+
+
+if __name__ == '__main__':
+    unittest.main()
