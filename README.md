@@ -40,6 +40,13 @@ This system implements event cancellation functionality for Xavier University pr
 - Records sync results with timestamps
 - Maintains audit trail of all sync operations
 
+#### User Story #8: CPSC Event Alert Subscriptions
+- Students can subscribe to alerts for CPSC events
+- User class with name, email, user_id, role, and alerts list
+- Subscribe/unsubscribe functionality with duplicate prevention
+- Support for multiple alert types (seminars, workshops, hackathons, etc.)
+- Enables students to stay active and engaged in their major
+
 ---
 
 ## How to Build This Workspace
@@ -72,7 +79,9 @@ Volcanoes/
 ├── models/
 │   ├── __init__.py
 │   ├── event.py              # Event model
-│   └── rsvp.py               # RSVP model
+│   ├── rsvp.py               # RSVP model
+│   ├── user.py               # User model (User Story #8)
+│   └── alert.py              # Alert model (User Story #8)
 ├── services/
 │   ├── __init__.py
 │   ├── event_cancellation_service.py  # RP1 & RP2 implementation
@@ -83,12 +92,14 @@ Volcanoes/
 ├── tests/
 │   ├── test_rp1_validation.py         # RP1 tests
 │   ├── test_rp2_notifications.py      # RP2 tests
-│   └── test_rp3_calendar_sync.py      # RP3 tests
+│   ├── test_rp3_calendar_sync.py      # RP3 tests
+│   └── test_user_story_8.py           # User Story #8 tests
 ├── examples/
 │   ├── rp1_validation_example.py      # RP1 demo
 │   ├── rp2_notification_example.py    # RP2 demo
 │   ├── rp3_calendar_sync_example.py   # RP3 demo
-│   └── complete_integration_demo.py   # Full workflow demo
+│   ├── complete_integration_demo.py   # Full workflow demo
+│   └── user_story_8_example.py        # User Story #8 demo
 ├── requirements.txt
 └── README.md
 ```
@@ -110,6 +121,9 @@ python tests/test_rp2_notifications.py
 
 # Test Use Case RP3 - Calendar Sync
 python tests/test_rp3_calendar_sync.py
+
+# Test User Story #8 - Alert Subscriptions
+python tests/test_user_story_8.py
 ```
 
 ### Run Examples
@@ -128,6 +142,9 @@ python examples/rp3_calendar_sync_example.py
 
 # Demo Complete Integration (All Use Cases)
 python examples/complete_integration_demo.py
+
+# Demo User Story #8 - Alert Subscriptions
+python examples/user_story_8_example.py
 ```
 
 ### Usage in Your Code
