@@ -42,6 +42,12 @@ class TestConflictChecker(unittest.TestCase):
         result = cc.check_conflict("Gym", new_start, new_end)
         self.assertFalse(result)
 
+    def test_register_event_adds_event(self):
+        cc = ConflictChecker(events=[])
+        cc.register_event(self.event)
+        self.assertEqual(len(cc.events), 1)
+        self.assertEqual(cc.events[0], self.event)
+
     
 
 
