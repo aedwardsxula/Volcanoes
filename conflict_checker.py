@@ -10,3 +10,8 @@ class ConflictChecker:
                 if (new_start < existing_end and new_end > existing_start):
                     return True 
         return False  
+    
+    def register_event(self, event):
+        self.events.append(event)
+
+    
