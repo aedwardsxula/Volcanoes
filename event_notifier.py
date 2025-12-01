@@ -14,4 +14,11 @@ class EventNotifier:
         self.event_subscribers[user_id] = category
         print(f"{user_id} subscribed to {'all events' if category is None else category}.")
 
+    def unsubscribe(self, user_id):
+        if user_id in self.event_subscribers:
+            del self.event_subscribers[user_id]
+            print(f"{user_id} unsubscribed from notifications.")
+        else:
+            print(f"{user_id} was not subscribed.")
+
     
