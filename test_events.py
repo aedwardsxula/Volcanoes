@@ -2,11 +2,12 @@ import unittest
 from datetime import datetime
 from events import Events  
 
+
 class TestEventTimeMethods(unittest.TestCase):
 
 
     def setUp(self):
-        self.event = Events(title="Sample Event", description="Testing event", start_time="2:00pm", end_time="3:00pm", ocation="Zoom")
+        self.event = Events(title="Sample Event", description="Testing event", start_time="2:00pm", end_time="3:00pm", location="Zoom")
         
 
     # validate_event_time Tests
@@ -51,5 +52,5 @@ class TestEventTimeMethods(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.event.update_event_time("2:61pm", "3:00pm") 
 
-    if __name__ == "__main__":
-        unittest.main()
+if __name__ == "__main__":
+     unittest.main()

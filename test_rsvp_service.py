@@ -3,7 +3,7 @@ from datetime import datetime
 from rsvp_service import RSVPService
 from rsvp import RSVP
 from events import Events
-from user import User
+from models.user import User
 
 
 class TestRSVPService(unittest.TestCase):

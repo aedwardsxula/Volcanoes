@@ -1,7 +1,7 @@
 from rsvp import RSVP
 from datetime import datetime
 from events import Events
-from user import User
+from models.user import User
 
 # User Story #37: Implement RSVP functionality (create, cancel, list user RSVPs).
 # Backfill commit to document feature implementation.
@@ -39,4 +39,6 @@ class RSVPService:
             return "You have no active RSVPs."
         return [f"{r.event.title}: {r.status}" for r in user_rsvps]
 
-    
+    def get_rsvp_users_for_event(self, event):
+        def get_rsvp_users_for_event(self, event):
+            return [r.user_id for r in self.rsvps if r.event == event and r.status == "going"]
