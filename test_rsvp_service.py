@@ -72,6 +72,22 @@ class TestRSVPService(unittest.TestCase):
         result = self.rsvp_service.get_rsvp_users_for_event(self.event1)
         self.assertEqual(result, [self.user2.user_id])
 
+    # Test get_users_object_for_event()
+    def test_get_users_object_for_event(self):
+        result = self.rsvp_service.get_users_object_for_event(self.event2)
+        self.assertEqual(result, [])
+        self.rsvp_service.create_rsvp(self.event2, self.user1)
+        self.rsvp_service.create_rsvp(self.event2, self.user2)
+
+        result = self.rsvp_service.get_users_object_for_event(self.event2)
+        self.assertEqual(len(result), 2)
+        self.assertIn(self.user1, result)
+        self.assertIn(self.user2, result)
+
+        self.rsvp_service.cancel_rsvp(self.event2, self.user2)
+        result = self.rsvp_service.get_users_object_for_event(self.event2)
+        self.assertEqual(result, [self.user1])
+
 
 if __name__ == '__main__':
     unittest.main()
