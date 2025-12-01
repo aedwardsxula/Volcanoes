@@ -1,11 +1,12 @@
 from datetime import datetime
 import re
+from xml.parsers.expat import errors
 
 # User Story #6: Add event time validation and event time update functionality.
 # Backfill commit documenting implementation.
 
 class Events:
-    def __init__(self, title, description, start_time, end_time, location):
+    def __init__(self, title, description, start_time, end_time, location, notifier=None):
         self.title = title
         self.description = description
         self.start_time = start_time
@@ -14,13 +15,14 @@ class Events:
         self.created_at = None
         self.updated_at = None
         self.status = "active"
+        self.notifier = notifier  
 
     def __repr__(self):
         return f"title: {self.title}, \ndescription: {self.description}, \nstart_time: {self.start_time}, \nend_time: {self.end_time}, location: {self.location}"
     
     @staticmethod
-    def create_event(title, description, start_time, end_time, location):
-        event = Events(title, description, start_time, end_time, location)
+    def create_event(title, description, start_time, end_time, location, notifier=None):
+        event = Events(title, description, start_time, end_time, location, notifier)
         event.created_at = datetime.now()
         return event
     
@@ -62,8 +64,9 @@ class Events:
                 if word in lower_name:
                     errors.append(f"Event name cannot contain '{word}'.")
 
-            if cleaned == getattr(self, "name", None):
+            if cleaned == getattr(self, "title", None):
                 errors.append("New event name must be different from the current name.")
+
 
             if errors:
                 raise ValueError("Invalid event name: " + "; ".join(errors))
@@ -80,6 +83,9 @@ class Events:
         """
         self.validate_event_name(new_name)
         self.title = new_name.strip()
+        self.updated_at = datetime.now()
+        if self.notifier:
+            self.notifier.notify_event_update(self)
         return f"Event name successfully updated to '{self.title}'."
     
     
@@ -112,7 +118,8 @@ class Events:
             self.start_time = new_start_time
             self.end_time = new_end_time
             self.updated_at = datetime.now()
-            
+            if self.notifier:
+                self.notifier.notify_event_update(self)
             return f"Event time successfully updated to start: '{self.start_time}', end: '{self.end_time}'."
 
 event1 = Events.create_event("Online Workshop", "Join us for a virtual workshop on Python.", "2023-10-01 10:00am", "2023-10-01 12:00pm", "Zoom")
