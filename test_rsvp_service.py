@@ -56,6 +56,22 @@ class TestRSVPService(unittest.TestCase):
         result = self.rsvp_service.get_user_rsvps(self.user1)
         self.assertEqual(result, "You have no active RSVPs.")
 
+    # Test get_rsvp_users_for_event()
+    def test_get_rsvp_users_for_event(self):
+        result = self.rsvp_service.get_rsvp_users_for_event(self.event1)
+        self.assertEqual(result, [])
+        self.rsvp_service.create_rsvp(self.event1, self.user1)
+        self.rsvp_service.create_rsvp(self.event1, self.user2)
+
+        result = self.rsvp_service.get_rsvp_users_for_event(self.event1)
+        self.assertEqual(len(result), 2)
+        self.assertIn(self.user1.user_id, result)
+        self.assertIn(self.user2.user_id, result)
+
+        self.rsvp_service.cancel_rsvp(self.event1, self.user1)
+        result = self.rsvp_service.get_rsvp_users_for_event(self.event1)
+        self.assertEqual(result, [self.user2.user_id])
+
 
 if __name__ == '__main__':
     unittest.main()
