@@ -3,12 +3,16 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+import unittest
 from datetime import datetime, timedelta
 from models.event import Event
 from services.calendar_sync_service import CalendarSyncService
 
 
-def test_generate_ics_canceled_event():
+class TestCalendarSyncService(unittest.TestCase):
+    """Test cases for CalendarSyncService."""
+    
+    def test_generate_ics_canceled_event(self):
     """Test ICS generation for canceled event includes CANCELLED status."""
     sync_service = CalendarSyncService()
     
@@ -27,13 +31,11 @@ def test_generate_ics_canceled_event():
     
     ics_data = sync_service.generate_ics_data(event)
     
-    assert 'STATUS:CANCELLED' in ics_data
-    assert 'Test Event' in ics_data
-    assert 'Test cancellation' in ics_data
-    print("✓ Test passed: ICS generation for canceled event")
-
-
-def test_generate_ics_active_event():
+    self.assertIn('STATUS:CANCELLED', ics_data)
+    self.assertIn('Test Event', ics_data)
+    self.assertIn('Test cancellation', ics_data)
+    
+    def test_generate_ics_active_event(self):
     """Test ICS generation for active event includes CONFIRMED status."""
     sync_service = CalendarSyncService()
     
@@ -51,13 +53,11 @@ def test_generate_ics_active_event():
     
     ics_data = sync_service.generate_ics_data(event)
     
-    assert 'STATUS:CONFIRMED' in ics_data
-    assert 'Active Event' in ics_data
-    assert 'STATUS:CANCELLED' not in ics_data
-    print("✓ Test passed: ICS generation for active event")
-
-
-def test_sync_to_all_integrations():
+    self.assertIn('STATUS:CONFIRMED', ics_data)
+    self.assertIn('Active Event', ics_data)
+    self.assertNotIn('STATUS:CANCELLED', ics_data)
+    
+    def test_sync_to_all_integrations(self):
     """Test syncing event to all default integrations."""
     sync_service = CalendarSyncService()
     
@@ -76,14 +76,12 @@ def test_sync_to_all_integrations():
     
     result = sync_service.sync_event(event)
     
-    assert result['ics_generated'] == True
-    assert result['integrations_synced'] == 2  # Google + Outlook
-    assert result['integrations_failed'] == 0
-    assert len(result['sync_results']) == 2
-    print("✓ Test passed: Sync to all integrations")
-
-
-def test_sync_to_specific_integration():
+    self.assertTrue(result['ics_generated'])
+    self.assertEqual(result['integrations_synced'], 2)  # Google + Outlook
+    self.assertEqual(result['integrations_failed'], 0)
+    self.assertEqual(len(result['sync_results']), 2)
+    
+    def test_sync_to_specific_integration(self):
     """Test syncing event to specific integration only."""
     sync_service = CalendarSyncService()
     
@@ -102,15 +100,13 @@ def test_sync_to_specific_integration():
     
     result = sync_service.sync_event(event, integrations=['google_calendar'])
     
-    assert result['ics_generated'] == True
-    assert result['integrations_synced'] == 1
-    assert result['integrations_failed'] == 0
-    assert len(result['sync_results']) == 1
-    assert result['sync_results'][0]['integration'] == 'google_calendar'
-    print("✓ Test passed: Sync to specific integration")
-
-
-def test_sync_history_tracking():
+    self.assertTrue(result['ics_generated'])
+    self.assertEqual(result['integrations_synced'], 1)
+    self.assertEqual(result['integrations_failed'], 0)
+    self.assertEqual(len(result['sync_results']), 1)
+    self.assertEqual(result['sync_results'][0]['integration'], 'google_calendar')
+    
+    def test_sync_history_tracking(self):
     """Test sync history is properly tracked and can be filtered."""
     sync_service = CalendarSyncService()
     
@@ -146,26 +142,16 @@ def test_sync_history_tracking():
     
     # Check total history
     all_history = sync_service.get_sync_history()
-    assert len(all_history) >= 4  # At least 2 events × 2 integrations
+    self.assertGreaterEqual(len(all_history), 4)  # At least 2 events × 2 integrations
     
     # Check filtered history
     event1_history = sync_service.get_sync_history(event_id="evt_005")
-    assert len(event1_history) == 2
-    assert all(h.event_id == "evt_005" for h in event1_history)
+    self.assertEqual(len(event1_history), 2)
+    self.assertTrue(all(h.event_id == "evt_005" for h in event1_history))
     
     google_history = sync_service.get_sync_history(integration="google_calendar")
-    assert all(h.integration == "google_calendar" for h in google_history)
-    
-    print("✓ Test passed: Sync history tracking")
+    self.assertTrue(all(h.integration == "google_calendar" for h in google_history))
 
 
 if __name__ == "__main__":
-    print("Running CalendarSyncService Tests...")
-    print("-" * 50)
-    test_generate_ics_canceled_event()
-    test_generate_ics_active_event()
-    test_sync_to_all_integrations()
-    test_sync_to_specific_integration()
-    test_sync_history_tracking()
-    print("-" * 50)
-    print("All CalendarSyncService tests passed! ✓")
+    unittest.main()

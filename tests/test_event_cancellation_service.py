@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+import unittest
 from datetime import datetime, timedelta
 from models.event import Event
 from models.rsvp import RSVP
@@ -13,7 +14,10 @@ from services.rsvp_service import RSVPService
 from utils.notification_utils import NotificationService
 
 
-def test_validate_late_cancellation_with_reason():
+class TestEventCancellationService(unittest.TestCase):
+    """Test cases for EventCancellationService."""
+    
+    def test_validate_late_cancellation_with_reason(self):
     """Test late cancellation (< 24 hours) with valid reason passes validation."""
     service = EventCancellationService()
     
@@ -30,13 +34,11 @@ def test_validate_late_cancellation_with_reason():
     
     result = service.validate_cancellation_reason(event, "Emergency situation")
     
-    assert result['valid'] == True
-    assert result['is_late_cancellation'] == True
-    assert result['hours_until_event'] < 24
-    print("✓ Test passed: Late cancellation with reason")
-
-
-def test_validate_late_cancellation_without_reason():
+    self.assertTrue(result['valid'])
+    self.assertTrue(result['is_late_cancellation'])
+    self.assertLess(result['hours_until_event'], 24)
+    
+    def test_validate_late_cancellation_without_reason(self):
     """Test late cancellation (< 24 hours) without reason fails validation."""
     service = EventCancellationService()
     
@@ -51,15 +53,12 @@ def test_validate_late_cancellation_without_reason():
         organizer_name="Dr. Test"
     )
     
-    try:
+    with self.assertRaises(ValidationError) as context:
         result = service.validate_cancellation_reason(event, "")
-        assert False, "Should have raised ValidationError"
-    except ValidationError as e:
-        assert "Cancellation reason is required" in str(e)
-        print("✓ Test passed: Late cancellation without reason raises error")
-
-
-def test_notify_rsvp_cancellation_with_rsvps():
+    
+    self.assertIn("Cancellation reason is required", str(context.exception))
+    
+    def test_notify_rsvp_cancellation_with_rsvps(self):
     """Test notifying students who RSVP'd to canceled event."""
     rsvp_service = RSVPService()
     notification_service = NotificationService()
@@ -108,14 +107,12 @@ def test_notify_rsvp_cancellation_with_rsvps():
     
     result = cancellation_service.notify_rsvp_cancellation(event)
     
-    assert result['rsvp_count'] == 2
-    assert result['notifications_sent'] == 2
-    assert result['urgent'] == True
-    assert len(result['notified_students']) == 2
-    print("✓ Test passed: Notify RSVP'd students")
-
-
-def test_cancel_event_integration():
+    self.assertEqual(result['rsvp_count'], 2)
+    self.assertEqual(result['notifications_sent'], 2)
+    self.assertTrue(result['urgent'])
+    self.assertEqual(len(result['notified_students']), 2)
+    
+    def test_cancel_event_integration(self):
     """Test complete event cancellation with FeedService and NotificationService integration."""
     rsvp_service = RSVPService()
     notification_service = NotificationService()
@@ -147,20 +144,12 @@ def test_cancel_event_integration():
     # Cancel event
     result = cancellation_service.cancel_event(event, "Rescheduling")
     
-    assert result['event_id'] == "evt_004"
-    assert result['removed_from_feed'] == True
-    assert result['followers_notified'] == True
-    assert len(feed_service.feed) == 0  # Event should be removed from feed
-    assert event.status == "CANCELED"
-    print("✓ Test passed: Complete event cancellation integration")
+    self.assertEqual(result['event_id'], "evt_004")
+    self.assertTrue(result['removed_from_feed'])
+    self.assertTrue(result['followers_notified'])
+    self.assertEqual(len(feed_service.feed), 0)  # Event should be removed from feed
+    self.assertEqual(event.status, "CANCELED")
 
 
 if __name__ == "__main__":
-    print("Running EventCancellationService Tests...")
-    print("-" * 50)
-    test_validate_late_cancellation_with_reason()
-    test_validate_late_cancellation_without_reason()
-    test_notify_rsvp_cancellation_with_rsvps()
-    test_cancel_event_integration()
-    print("-" * 50)
-    print("All EventCancellationService tests passed! ✓")
+    unittest.main()
