@@ -34,3 +34,29 @@ class TestEventNotifier(unittest.TestCase):
     def test_subscribe_invalid_category(self):
         self.notifier.subscribe(self.user1.user_id, "InvalidCat")
         self.assertNotIn(self.user1.user_id, self.notifier.event_subscribers)
+
+    def test_notify_event_update_category_matching(self):
+        self.notifier.subscribe(self.user1.user_id)  
+        self.notifier.subscribe(self.user2.user_id, "Tutoring")  # Won't match event1
+        self.notifier.subscribe(self.user3.user_id, "Career")    # Won't match event1
+
+        log_len_before = len(self.notifier.notification_log)
+        self.notifier.notify_event_update(self.event1)
+        log_len_after = len(self.notifier.notification_log)
+
+        self.assertEqual(log_len_after, log_len_before + 1)
+        last_log = self.notifier.notification_log[-1]
+        self.assertIn(self.user1.user_id, last_log["recipients"])
+        self.assertNotIn(self.user2.user_id, last_log["recipients"])
+        self.assertNotIn(self.user3.user_id, last_log["recipients"])
+
+    def test_notify_event_update_virtual_event(self):
+        self.notifier.subscribe(self.user2.user_id, "Virtual Events")
+        self.notifier.notify_event_update(self.event2)
+
+        last_log = self.notifier.notification_log[-1]
+        self.assertIn(self.user2.user_id, last_log["recipients"])
+        self.assertEqual(last_log["event_category"], "Virtual Events")
+
+if __name__ == "__main__":
+    unittest.main()
