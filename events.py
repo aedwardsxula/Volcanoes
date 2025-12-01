@@ -112,6 +112,7 @@ class Events:
             self.start_time = new_start_time
             self.end_time = new_end_time
             self.updated_at = datetime.now()
+            
             return f"Event time successfully updated to start: '{self.start_time}', end: '{self.end_time}'."
 
 event1 = Events.create_event("Online Workshop", "Join us for a virtual workshop on Python.", "2023-10-01 10:00am", "2023-10-01 12:00pm", "Zoom")
