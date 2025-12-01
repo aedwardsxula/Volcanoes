@@ -40,6 +40,7 @@ class RSVPService:
         return [f"{r.event.title}: {r.status}" for r in user_rsvps]
 
     def get_rsvp_users_for_event(self, event):
-            return [r.user_id for r in self.rsvps if r.event == event and r.status == "going"]
+        return [r.user_id for r in self.rsvps if r.event == event and r.status == "going"]
         
-    
+    def get_users_object_for_event(self, event):
+        return [r.user for r in self.rsvps if r.event == event and r.status == "going"]
