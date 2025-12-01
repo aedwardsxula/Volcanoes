@@ -1,11 +1,13 @@
 # User Story #37: RSVP model for event attendance.
 # Backfill commit to provide documentation and clarity.
+from models.user import User 
 
 class RSVP:
-    def __init__(self, event, user_id, role):
+    def __init__(self, event, user):
         self.event = event
-        self.user_id = user_id
-        self.role = role
+        self.user = user            
+        self.user_id = user.user_id 
+        self.role = user.role       
         self.created_at = None
         self.status = None
 
