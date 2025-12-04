@@ -128,6 +128,6 @@ event4 = Events.create_event("Webinar on Data Science", "An in-depth webinar on 
 # print(event1.update_event_name("Online Workshop dummy"))
 # print(event1.update_event_name("  "))  
 # print(event1.update_event_name("Test Event&!"))
-print(event1.update_event_time("11:00am", "12:00pm"))
+#print(event1.update_event_time("11:00am", "12:00pm"))
 #print(event1.update_event_time("2:00pm", "1:00pm"))
 #print(event1.update_event_time("11:00am", "01:00pm"))
