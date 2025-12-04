@@ -1,5 +1,6 @@
 # Team Volcanoes
 
+
 ## What happens when Dr. Edwards runs your code ($ python main.py)
 main.py': [Errno 2] No such file or directory
 
@@ -112,18 +113,22 @@ A console-based program where CS/CIS/BINF majors, minors, and faculty can create
 ## How to build:
 ```bash
 # Clone the repo
-git clone https://github.com/your-team/repo.git
-cd repo
+git clone https://github.com/ausarkhan/Volcanoes.git
+cd Volcanoes
+
+# Install dependencies
+pip install -r requirements.txt
 
 # (Optional) create virtual environment
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate     
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
 ## Run instructions:
 ```bash
 # Run the main program
-python3 main.py
+python3 driver.py
 
 # Run all unit tests
 python3 -m unittest discover -s tests
