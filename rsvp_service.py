@@ -13,7 +13,7 @@ class RSVPService:
     def __repr__(self):
         if not self.rsvps:
             return "No RSVPs yet."
-        return "All current RSVPs:\n" + "\n".join([f"User {r.user_id} is '{r.status}' for event '{r.event.title}'" for r in self.rsvps])
+        return "All current RSVPs:\n" + "\n".join([f"User {r.user_id} is '{r.status}' to event '{r.event.title}'" for r in self.rsvps])
     
     def create_rsvp(self, event, user):
         for r in self.rsvps:
@@ -38,5 +38,6 @@ class RSVPService:
         if not user_rsvps:
             return "You have no active RSVPs."
         return [f"{r.event.title}: {r.status}" for r in user_rsvps]
+    
 
     

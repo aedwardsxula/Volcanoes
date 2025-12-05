@@ -11,6 +11,7 @@ class Events:
         self.id = id
         self.title = title
         self.description = description
+
         
         # Support both start_time/end_time and starts_at/ends_at
         if starts_at is not None:
@@ -44,6 +45,7 @@ class Events:
         event = Events(title, description, start_time, end_time, location)
         event.created_at = datetime.now()
         return event
+    
     
 
     def is_event_virtual(self):
